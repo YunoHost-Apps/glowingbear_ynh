@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html ng-app="weechat" ng-cloak>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Glowing Bear">
+    <meta name="theme-color" content="#181818">
+    <meta http-equiv="x-dns-prefetch-control" content="off">
+    <!-- https://w3c.github.io/manifest/ && https://developer.mozilla.org/en-US/docs/Web/Manifest -->
+    <link rel="manifest" href="webapp.manifest.json">
+    <title ng-bind-template="{{ notificationStatus }}Glowing Bear {{ pageTitle}}"></title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" media="screen" integrity="sha384-7tY7Dc2Q8WQTKGz2Fa0vC4dWQo07N4mJjKvHfIGnxuC4vPqFGFQppd9b3NWpf18/" crossorigin="anonymous">
+    <link rel="shortcut icon" sizes="128x128" href="assets/img/glowing_bear_128x128.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="assets/img/glowing_bear_128x128.png">
+    <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png" >
+    <link href="css/glowingbear.css" rel="stylesheet" media="screen">
+    <link href="css/themes/dark.css" rel="stylesheet" media="screen" id="themeCSS" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular.min.js" integrity="sha384-r1y8TJcloKTvouxnYsi4PJAx+nHNr90ibsEn3zznzDzWBN9X3o3kbHLSgcIPtzAp" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-route.min.js" integrity="sha384-fQQcs0/yvL0uyyzpXoTKfcQl5e9GYh7GKIft35qSjfKXSILYNI6YZOM0Ju94DY+/" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-sanitize.min.js" integrity="sha384-79uolbJAcWnfqb2Oi/w0fEz2NdE5lvY1p+TSew6D3XC7PlZY1OGuvGBiwjZhFvOg" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-touch.min.js" integrity="sha384-bnrVwYH8/uQCvK9n+xYQKdf1xtgSNHBYcy0djCofRUPvAt93iEhBfHlngRP/aXsg" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js" integrity="sha384-nXjwhL1LfWUDVHxQ2R0rHpbr/E6lfCFXR4kfcPHp1eLGH1dH/mZohGINd44EzEya" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.0/lib/js/emojione.min.js" integrity="sha384-pJb7FFLYTcgO7KbgirAXNIHFIKzywqq4LIcWx9cavPapYWdCH5mcYptrkpHHEkH1" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="3rdparty/inflate.min.js"></script>
+    <script type="text/javascript" src="js/localstorage.js"></script>
+    <script type="text/javascript" src="js/weechat.js"></script>
+    <script type="text/javascript" src="js/irc-utils.js"></script>
+    <script type="text/javascript" src="js/glowingbear.js"></script>
+    <script type="text/javascript" src="js/settings.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/notifications.js"></script>
+    <script type="text/javascript" src="js/filters.js"></script>
+    <script type="text/javascript" src="js/handlers.js"></script>
+    <script type="text/javascript" src="js/connection.js"></script>
+    <script type="text/javascript" src="js/file-change.js"></script>
+    <script type="text/javascript" src="js/imgur-drop-directive.js"></script>
+    <script type="text/javascript" src="js/whenscrolled-directive.js"></script>
+    <script type="text/javascript" src="js/inputbar.js"></script>
+    <script type="text/javascript" src="js/plugin-directive.js"></script>
+    <script type="text/javascript" src="js/websockets.js"></script>
+    <script type="text/javascript" src="js/models.js"></script>
+    <script type="text/javascript" src="js/plugins.js"></script>
+    <script type="text/javascript" src="js/imgur.js"></script>
+    <script type="text/javascript" src="3rdparty/favico-0.3.5.min.js"></script>
+  </head>
+  <body ng-controller="WeechatCtrl" ng-keydown="handleKeyPress($event)" ng-keyup="handleKeyRelease($event)"  ng-keypress="handleKeyPress($event)" ng-class="{'no-overflow': connected}" ng-init="init()" lang="en-US">
+    <div class="alert alert-danger upload-error" ng-show="uploadError">
+      <p><strong>Upload error:</strong> Image upload failed.</p>
+    </div>
+    <div ng-hide="connected" class="container">
+      <h2>
+        <img alt="logo" src="assets/img/glowing-bear.svg">
+        <span>Glowing Bear</span>
+        <small>WeeChat web frontend</small>
+      </h2>
+      <div class="alert alert-danger" ng-show="errorMessage">
+        <strong>Connection error</strong> The client was unable to connect to the WeeChat relay
+      </div>
+      <div class="alert alert-danger" ng-show="sslError">
+        <strong>Secure connection error</strong> A secure connection with the WeeChat relay could not be initiated. This is most likely because your browser does not trust your relay's certificate. Please read the encryption instructions below!
+      </div>
+      <div class="alert alert-danger" ng-show="securityError">
+        <strong>Secure connection error</strong> Unable to connect to unencrypted relay when your are connecting to Glowing Bear over HTTPS. Please use an encrypted relay or load the page without using HTTPS.
+      </div>
+      <div class="panel-group accordion">
+        <div class="panel" data-state="active">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="accordion-toggle" ng-click="toggleAccordion($event)">
+                Connection settings
+              </a>
+            </h4>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+               <form class="form-signin" role="form">
+                <div class="form-group">
+                  <label class="control-label" for="host">WeeChat relay hostname and port number</label>
+                  <div class="input-group">
+                    <div class="row no-gutter">
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control favorite-font" id="host" ng-model="settings.host" placeholder="Address" autocapitalize="off">
+                      </div>
+                      <div class="col-sm-3">
+                        <input type="text" class="form-control favorite-font" id="port" ng-model="settings.port" placeholder="Port">
+                      </div>
+                    </div>
+                  </div>
+                  <label class="control-label" for="password">WeeChat relay password</label>
+                  <input type="password" class="form-control favorite-font" id="password" ng-model="password" placeholder="Password">
+                  <div class="alert alert-danger" ng-show="passwordError">
+                    Error: wrong password
+                  </div>
+
+                  <div class="checkbox">
+                    <label class="control-label" for="savepassword">
+                        <input type="checkbox" id="savepassword" ng-model="settings.savepassword">
+                        Save password in your browser
+                    </label>
+                  </div>
+                  <div class="checkbox" ng-show="settings.savepassword">
+                    <label class="control-label" for="autoconnect">
+                        <input type="checkbox" id="autoconnect" ng-model="settings.autoconnect">
+                        Automatically connect
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label class="control-label" for="ssl">
+                      <input type="checkbox" id="ssl" ng-model="settings.ssl">
+                      Encryption. Read instructions for help
+                    </label>
+                  </div>
+                </div>
+                <button class="btn btn-lg btn-primary" ng-click="connect()">{{ connectbutton }}  <i ng-class="connectbuttonicon" class="glyphicon"></i></button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="panel" data-state="collapsed">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="accordion-toggle" ng-click="toggleAccordion($event)">
+                Usage instructions
+              </a>
+            </h4>
+          </div>
+          <div id="collapseTwo" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <h3>Configuring the relay</h3>
+              <div>To start using glowing bear, please enable the relay plugin in your WeeChat client:
+<pre>
+/set relay.network.password yourpassword
+/relay add weechat {{ settings.port || 9001 }}
+</pre>
+              <span class="label label-danger">WeeChat version 0.4.2 or higher is required.</span><br>
+              The communication goes directly between your browser and your WeeChat relay in plain text. Check the instructions below for help on setting up encrypted communication.
+              Connection settings, including your password, are saved locally in your own browser between sessions.
+              <br>
+              <h3>Shortcuts</h3>
+              Glowing Bear has a few shortcuts:
+              <ul>
+                <li><kbd>ALT-n</kbd>: Toggle nicklist</li>
+                <li><kbd>ALT-l</kbd>: Focus on input bar</li>
+                <li><kbd>ALT-[0-9]</kbd>: Switch to buffer number N</li>
+                <li><kbd>ALT-a</kbd>: Focus on next buffer with activity</li>
+                <li><kbd>ALT-&lt;</kbd>: Switch to previous active buffer</li>
+                <li><kbd>ALT-g</kbd>: Focus on buffer list filter</li>
+                <li><kbd>Esc-Esc</kbd>: Disconnect (double-tap)</li>
+                <li>Arrow keys: Navigate history</li>
+                <li><kbd>Tab</kbd>: Complete nick</li>
+                <li>The following readline/emacs style keybindings can be enabled with a setting: <span title="Move cursor to beginning of line"><kbd>Ctrl-a</kbd></span>, <span title="Move cursor to te end of the line"><kbd>Ctrl-e</kbd></span>, <span title="Delete from cursor to beginning of the line"><kbd>Ctrl-u</kbd></span>, <span title="Delete from cursor to the end of the line"><kbd>Ctrl-k</kbd></span>, <span title="Delete from cursor to previous space"><kbd>Ctrl-w</kbd></span></li>
+              </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel" data-state="collapsed">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="accordion-toggle" ng-click="toggleAccordion($event)">
+                Encryption instructions
+              </a>
+            </h4>
+          </div>
+          <div id="collapseThree" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <p>If you check the encryption box, the communication between browser and WeeChat will be encrypted with TLS.</p>
+              <p><strong>Note</strong>: If you are using a self-signed certificate, you have to visit <a href="https://{{ settings.host }}:{{ settings.port }}/weechat">https://{{ settings.host || 'weechathost' }}:{{ settings.port || 'relayport' }}/weechat</a> in your browser first to add a security exception. You can close that tab once you confirmed the certificate, no content will appear. The necessity of this process is a bug in <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=594502">Firefox</a> and other browsers.</p>
+              <p><strong>Setup</strong>: If you want to use an encrypted session you first have to set up the relay to use TLS. You basically have two options: a self-signed certificate is easier to set up, but requires manual security exceptions. Using a certificate that is trusted by your browser requires more setup, but offers greater convenience later on and does not require security exceptions. You can find a guide to set up WeeChat with a free trusted certificate from StartSSL <a href="https://4z2.de/2014/07/06/weechat-trusted-relay">here</a>. Should you wish to use a self-signed certificate instead, execute the following commands in a shell on the same host and as the user running WeeChat:</p>
+<pre>
+$ mkdir -p ~/.weechat/ssl
+$ cd ~/.weechat/ssl
+$ openssl req -nodes -newkey rsa:4096 -keyout relay.pem -x509 -days 365 -out relay.pem -sha256 -subj "/CN={{settings.host || 'your weechat host'}}/"
+</pre>
+              <p>If WeeChat is already running, you can reload the certificate and private key and set up an encrypted relay on port {{ settings.port || 9001 }} with these WeeChat commands:</p>
+<pre>
+/set relay.network.password yourpassword
+/relay sslcertkey
+/relay add ssl.weechat {{ settings.port || 9001 }}
+</pre>
+            </div>
+          </div>
+        </div>
+        <div class="panel" data-state="collapsed" ng-hide="isinstalled">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="accordion-toggle" ng-click="toggleAccordion($event)">
+                Install app
+              </a>
+            </h4>
+          </div>
+          <div id="collapseFour" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <p>You don't need to install anything to use this app, it should work with any modern browser. Start using it <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">right now</a>! However, there are a few ways to improve integration with your operating system.</p>
+              <h3>Mobile Applications</h3>
+              <p>If you're running Android 4.4 or later, you can install our app from the Google Play Store! We also provide an optimized application for Firefox OS devices. If you're using the Firefox browser, keep on reading below -- the Firefox OS app won't work for you</p>
+              <p><a href="https://play.google.com/store/apps/details?id=com.glowing_bear"><img alt="Android app on Google Play" src="assets/img/badge_playstore.png" /></a> <a href="https://marketplace.firefox.com/app/glowing-bear/"><img alt="Firefox OS app in the Firefox Marketplace" src="assets/img/badge_firefoxos.png" /></a></p>
+              <h3>Firefox Browser</h3>
+              <p>If you have a recent version of Firefox you can install Glowing Bear as a Firefox app. Click the button to install.</p>
+              <p><button class="btn btn-lg btn-primary" ng-click="install()">Install Firefox app <i class="glyphicon glyphicon-chevron-right"></i></button></p>
+              <p>Note for self-signed certificates: Firefox does not share a certificate storage with Firefox apps, so accepting self-signed certificates is a bit tricky.</p>
+              <h3>Chrome</h3>
+              <p>To install Glowing Bear as an app in Chrome for Android, select <kbd>Menu - Add to home screen</kbd>. In the desktop version of Chrome, click <kbd>Menu - More tools - Create application shortcuts</kbd>.</p>
+            </div>
+          </div>
+        </div>
+        <div class="panel" data-state="collapsed">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="accordion-toggle" ng-click="toggleAccordion($event)">
+                Get involved
+              </a>
+            </h4>
+          </div>
+          <div id="collapseFive" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <p>Glowing bear is built by a small group of developers in their free time. As we're always trying to improve it, we would love getting your feedback and help. If that sounds like something you might enjoy, check out our <a href="https://github.com/glowing-bear/glowing-bear">project page</a> on GitHub!</p>
+              <p>If you're interested in contributing or simply want to say hello, head over to <strong>#glowing-bear</strong> on <strong>freenode!</strong> We won't bite, promise (-ish).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content" id="content" sidebar-state="visible" ng-show="connected">
+      <div id="topbar">
+        <div class="brand">
+          <a href="#" ng-click="toggleSidebar()">
+            <img alt="brand" src="assets/img/favicon.png" title="Connected to {{ settings.host }}:{{ settings.port}}">
+          </a>
+          <span class="badge" ng-show="unread > 0">{{unread}}</span>
+          <span class="badge danger" ng-show="notifications > 0">{{notifications}}</span>
+
+          <button ng-if="debugMode" ng-click="countWatchers()">Count<br />Watchers</button>
+        </div>
+
+        <div class="title" title="{{activeBuffer().rtitle}}">
+          <span class="desktop" ng-repeat="part in activeBuffer().title" ng-class="::part.classes" ng-bind-html="::(part.text | linky:'_blank' | DOMfilter:'irclinky')"></span>
+          <span class="mobile" ng-click="showModal('topicModal')" ng-class="{'active': activeBuffer().active, 'channel': activeBuffer().type === 'channel', 'channel_hash': activeBuffer().prefix === '#', 'channel_plus': activeBuffer().prefix === '+', 'channel_ampersand': activeBuffer().prefix === '&'}">{{ activeBuffer().trimmedName || activeBuffer().fullName }}</span>
+        </div>
+
+        <div class="actions pull-right vertical-line-left">
+          <a class="settings-toggle" ng-click="showModal('settingsModal')" title="Options menu" href="#">
+            <i class="glyphicon glyphicon-cog"></i>
+          </a>
+          <a ng-click="disconnect()" title="Disconnect from WeeChat" href="#">
+            <i class="glyphicon glyphicon-off"></i>
+          </a>
+        </div>
+      </div>
+      <div id="sidebar" data-state="visible" ng-swipe-left="hideSidebar()" class="vertical-line">
+        <ul class="nav nav-pills nav-stacked" ng-class="{'indented': (predicate === 'serverSortKey'), 'showquickkeys': showQuickKeys}">
+          <li class="bufferfilter">
+            <form role="form">
+              <input class="form-control favorite-font" type="text" id="bufferFilter" ng-model="search" ng-keydown="handleSearchBoxKey($event)" placeholder="Search" autocomplete="off">
+            </form>
+          </li>
+          <li class="buffer" ng-class="{'active': buffer.active, 'indent': buffer.indent, 'channel': buffer.type === 'channel', 'channel_hash': buffer.prefix === '#', 'channel_plus': buffer.prefix === '+', 'channel_ampersand': buffer.prefix === '&', 'private': buffer.type === 'private'}" ng-repeat="(key, buffer) in (filteredBuffers = (getBuffers() | toArray:'withidx' | filter:{fullName:search} | filter:hasUnread | orderBy:predicate | getBufferQuickKeys:this))">
+            <a ng-click="setActiveBuffer(buffer.id)" title="{{ buffer.fullName }}" href="#">
+              <span class="badge pull-right" ng-class="{'danger': buffer.notification}" ng-if="buffer.notification || buffer.unread" ng-bind="buffer.notification || buffer.unread"></span>
+              <span class="buffer-quick-key">{{ buffer.$quickKey }}</span>
+              <span class="buffername">{{ buffer.trimmedName || buffer.fullName }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div id="bufferlines" class="favorite-font" ng-swipe-right="showSidebar()" ng-swipe-left="hideSidebar()" ng-class="{'withnicklist': showNicklist}" when-scrolled="infiniteScroll()" imgur-drop>
+        <div id="nicklist" ng-if="showNicklist" ng-swipe-right="closeNick()" class="vertical-line-left">
+          <ul class="nicklistgroup list-unstyled" ng-repeat="group in nicklist">
+            <li ng-repeat="nick in group.nicks|orderBy:'name'">
+              <a ng-click="openBuffer(nick.name)"><span ng-class="::nick.prefixClasses" ng-bind="::nick.prefix"></span><span ng-class="::nick.nameClasses" ng-bind="::nick.name"></span></a>
+            </li>
+          </ul>
+        </div>
+        <table ng-class="{'notimestamp':!settings.showtimestamp,'notimestampseconds':!settings.showtimestampSeconds}">
+          <tbody>
+            <tr class="bufferline">
+              <td ng-hide="activeBuffer().allLinesFetched" colspan="3">
+                <a class="fetchmorelines btn btn-xs btn-primary" ng-click="fetchMoreLines()" ng-hide="loadingLines" href="#">Fetch more lines</a>
+                <span ng-show="loadingLines">Fetching more lines <i class="glyphicon glyphicon-refresh glyphicon-spin"></i></span>
+              </td>
+            </tr>
+          </tbody>
+          <tbody ng-repeat="bufferline in bufferlines">
+            <tr class="bufferline">
+              <td class="time">
+                <span class="date" ng-class="::{'repeated-time': bufferline.shortTime==bufferlines[$index-1].shortTime}">
+                  <span class="cof-chat_time cob-chat_time coa-chat_time" ng-bind="::(bufferline.date|date:'HH')"></span><span class="cof-chat_time_delimiters cob-chat_time_delimiters coa-chat_time_delimiters">:</span><span class="cof-chat_time cob-chat_time coa-chat_time" ng-bind="::(bufferline.date|date:'mm')"></span><span class="seconds"><span class="cof-chat_time_delimiters cob-chat_time_delimiters coa-chat_time_delimiters">:</span><span class="cof-chat_time cob-chat_time coa-chat_time" ng-bind="::(bufferline.date|date:'ss')"></span></span>
+                </span>
+              </td>
+              <td class="prefix"><a ng-click="addMention(bufferline.prefix)"><span class="hidden-bracket">&lt;</span><span ng-repeat="part in ::bufferline.prefix" ng-class="::part.classes" ng-bind="::part.text|prefixlimit:25"></span><span class="hidden-bracket">&gt;</span></a></td><!--
+           --><td class="message"><!--
+             --><div ng-repeat="metadata in ::bufferline.metadata" plugin data="::metadata"></div><!--
+             --><span ng-repeat="part in ::bufferline.content" class="text" ng-class="::part.classes.concat(['line-' + part.$$hashKey.replace(':','_')])" ng-bind-html="::part.text | linky:'_blank' | DOMfilter:'irclinky' | DOMfilter:'emojify':settings.enableJSEmoji | DOMfilter:'inlinecolour' | DOMfilter:'mathjax':('.line-' + part.$$hashKey.replace(':','_')):settings.enableMathjax"></span>
+              </td>
+            </tr>
+            <tr class="readmarker" ng-if="activeBuffer().lastSeen==$index">
+              <td colspan="3">
+                <hr id="readmarker">
+              </td>
+            </tr>
+          </tbody>
+        </table><span id="end-of-buffer"></span>
+      </div>
+      <div class="footer" ng-class="{'withnicklist': showNicklist}">
+        <div input-bar input-id="sendMessage" command="command"></div>
+      </div>
+    </div>
+    <div id="soundNotification"></div>
+    <div id="reconnect" class="alert alert-danger" ng-click="reconnect()" ng-show="reconnecting">
+        <p><strong>Connection to WeeChat lost</strong></p>
+        <i class="glyphicon glyphicon-refresh"></i>
+        Reconnecting... <i class="glyphicon glyphicon-spin glyphicon-refresh"></i> <a class="btn btn-xs" ng-click="reconnect()" href="#">Click to try to reconnect now</a>
+    </div>
+    <div id="settingsModal" class="gb-modal" data-state="hidden">
+      <div class="backdrop" ng-click="closeModal($event)"></div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal($event)" aria-hidden="true">&times;</button>
+            <span class="pull-right version">Glowing Bear version 0.6.1-dev</span>
+            <h4 class="modal-title">Settings</h4>
+            <p>Settings will be stored in your browser.</p>
+          </div>
+          <div class="modal-body">
+            <ul class="">
+              <li class="standard-labels">
+                <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label for="font" class="col-sm-3 control-label make-thinner">Preferred font</label>
+                    <div class="col-sm-4">
+                      <input type="text" ng-model="settings.fontfamily" class="form-control" id="font">
+                    </div>
+
+                    <label for="size" class="col-sm-1 control-label">Size</label>
+                    <div class="col-sm-2">
+                      <input type="text" ng-model="settings.fontsize" class="form-control" id="size">
+                    </div>
+                  </div>
+                </form>
+              </li>
+              <li class="standard-labels">
+                <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label for="theme" class="col-sm-3 control-label make-thinner">Theme</label>
+                    <div class="col-sm-7">
+                      <select id="theme" class="form-control" ng-model="settings.theme" ng-options="theme for theme in themes"></select>
+                    </div>
+                  </div>
+                </form>
+              </li>
+
+              <li class="standard-labels">
+                <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label for="custom-css" class="col-sm-3 control-label make-thinner">Custom CSS</label>
+                    <div class="col-sm-7">
+                      <textarea id="custom-css" class="form-control" ng-model="settings.customCSS"></textarea>
+                    </div>
+                  </div>
+                </form>
+              </li>
+
+              <li>
+                <form class="form-inline" role="form">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="settings.onlyUnread">
+                      Only show buffers with unread messages
+                    </label>
+                  </div>
+                </form>
+              </li>
+              <li>
+                <form class="form-inline" role="form">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="settings.showtimestamp">
+                      Show timestamps
+                    </label>
+                  </div>
+                </form>
+                <ul ng-show="settings.showtimestamp">
+                  <li>
+                    <form class="form-inline" role="form">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="settings.showtimestampSeconds">
+                          Show seconds
+                        </label>
+                      </div>
+                    </form>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <form class="form-inline" role="form">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="settings.noembed">
+                       Hide embedded content by default<span class="text-muted settings-help">NSFW content will be hidden regardless of this choice</span>
+                    </label>
+                  </div>
+                </form>
+              </li>
+              <li>
+                <form class="form-inline" role="form">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="settings.hotlistsync">
+                      Mark messages as read in WeeChat
+                    </label>
+                  </div>
+                </form>
+              </li>
+              <li>
+                <form class="form-inline" role="form">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="settings.nonicklist">
+                      Hide nicklist
+                    </label>
+                  </div>
+                </form>
+              </li>
+              <li>
+                <form class="form-inline" role="form">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="settings.orderbyserver">
+                      Hierarchical buffer view (order by server)
+                    </label>
+                  </div>
+                </form>
+              </li>
+              <li>
+                <form class="form-inline" role="form">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="settings.readlineBindings">
+                      Enable common readline keybindings in input bar
+                    </label>
+                  </div>
+                </form>
+              </li>
+              <li>
+                <form class="form-inline" role="form">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="settings.useFavico">
+                      Display unread count in favicon
+                    </label>
+                  </div>
+                </form>
+              </li>
+              <li>
+                <form class="form-inline" role="form">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="settings.soundnotification">
+                      Play sound on notification
+                    </label>
+                  </div>
+                </form>
+              </li>
+              <li>
+                <form class="form-inline" role="form">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="settings.enableJSEmoji">
+                      Enable non-native Emoji support <span class="text-muted settings-help">Displays Emoji characters as images. Emoji provided free by <a href="http://emojione.com">http://emojione.com</a></span>
+                    </label>
+                  </div>
+                </form>
+              </li>
+               <li>
+                <form class="form-inline" role="form">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="settings.enableMathjax">
+                      Enable LaTeX math rendering
+                    </label>
+                  </div>
+                </form>
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" ng-click="closeModal($event)">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="topicModal" class="gb-modal" data-state="hidden">
+      <div class="backdrop" ng-click="closeModal($event)"></div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal($event)" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Channel topic</h4>
+            <p ng-repeat="part in activeBuffer().title" ng-class="::part.classes" ng-bind-html="::(part.text | linky:'_blank' | DOMfilter:'irclinky')"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" ng-click="closeModal($event)">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  </body>
+</html>
