@@ -5,4 +5,4 @@ This is the "Glowing Bear" app that runs in your browser (javascript required) a
 
 For more information please check
 
-https://www.glowing-bear.org/
+https://github.com/glowing-bear/glowing-bear
