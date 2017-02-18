@@ -1,35 +1,37 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Note: each files and directories you've saved using the ynh_backup helper
-# will be located in the current directory, regarding the last argument.
-
-# Exit on command errors and treat unset variables as an error
 set -eu
 
-# See comments in install script
-app=$YNH_APP_INSTANCE_NAME
-
-# Source YunoHost helpers
 source /usr/share/yunohost/helpers
 
-# Retrieve old app settings
-domain=$(ynh_app_setting_get "$app" domain)
-path=$(ynh_app_setting_get "$app" path)
+# TODO: enable with fix of https://github.com/YunoHost/yunohost/pull/246
+# source .hfunctions
 
-# Check domain/path availability
-sudo yunohost app checkurl "${domain}${path}" -a "$app" \
-    || ynh_die "Path not available: ${domain}${path}"
+main() {
+  local app=$YNH_APP_INSTANCE_NAME
+  local domain=$(ynh_app_setting_get $app domain)
+  local path=$(ynh_app_setting_get $app path)
+  local url=$(ynh_app_setting_get $app url)
+  local deploy_path=$(ynh_app_setting_get $app deploy_path)
+  local nginx_conf=/etc/nginx/conf.d/$domain.d/$app.conf
 
-# Restore sources & data
-src_path="/var/www/${app}"
-sudo cp -a ./sources "$src_path"
+  sudo yunohost app checkurl $url -a $app 
 
-# Restore permissions to app files
-# you may need to make some file and/or directory writeable by www-data (nginx user)
-sudo chown -R root: "$src_path"
+  sudo cp -a "./sources" $deploy_path
+  sudo chown www-data:www-data $deploy_path -R
 
-# Restore NGINX configuration
-sudo cp -a ./nginx.conf "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+  sudo cp -a "./conf/nginx.conf" $nginx_conf
 
-# Restart webserver
-sudo service nginx reload
+  sudo service nginx reload
+
+  # TODO: enable with fix of https://github.com/YunoHost/yunohost/pull/246
+  # update_accessibility $app $is_public
+
+  # TODO: remove with fix of https://github.com/YunoHost/yunohost/pull/246
+  if [[ ${is_public:-0} -eq 1 ]]; then
+    ynh_app_setting_set $app unprotected_uris "/"
+    sudo yunohost app ssowatconf
+  fi
+}
+
+main
