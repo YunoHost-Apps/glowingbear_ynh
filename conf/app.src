@@ -1,2 +1,3 @@
 SOURCE_URL=https://github.com/glowing-bear/glowing-bear/archive/v0.6.0.tar.gz
 SOURCE_SUM=3d536bfa479f2250506ed151945689f60f894a0f3b9e93bab18fcd25401512e7
+SOURCE_VERSION=0.6.0

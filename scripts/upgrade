@@ -9,6 +9,34 @@ set -eu
 source /usr/share/yunohost/helpers
 source .hfunctions
 
+max() {
+  local m=$1
+  local other=$@
+
+  for n in $other
+  do
+    if [ $n -gt $m ]; then
+      m=$n
+    fi
+  done
+  echo $m
+}
+
+is_new_version_available() {
+  local installed=( $(echo "$1" | tr '.' ' ') )
+  local available=( $(echo "$2" | tr '.' ' ') ) 
+  local len="$(max "${#installed[*]}" "${#available[*]}")"
+
+  for ((i=0; i<len; i++))
+  do
+    [ "${installed[i]:-0}" -lt "${available[i]:-0}" ] && return 0
+    [ "${installed[i]:-0}" -gt "${available[i]:-0}" ] && return 1
+  done
+
+  # both versions are equal
+  return 1
+}
+
 main() {
   local app=${YNH_APP_INSTANCE_NAME}
   local domain=$(ynh_app_setting_get ${app} domain)
@@ -17,10 +45,17 @@ main() {
   local deploy_path=$(ynh_app_setting_get $app deploy_path)
   local app_config=../conf/app.src 
   local nginx_config_template=../conf/nginx.conf
+  local installed_version=$(ynh_app_setting_get $app app_version)
+  local source_version=$(app_config_get $app_config "SOURCE_VERSION")
 
-  path=${path%/}
-
-  obtain_and_deploy_source $app_config $deploy_path
-  update_nginx_configuration $app $nginx_config_template $domain $path $deploy_path
-  update_accessibility $app $is_public
+  if is_new_version_available $installed_version $source_version; then
+    obtain_and_deploy_source $app_config $deploy_path
+    update_nginx_configuration $app $nginx_config_template $domain $path $deploy_path
+    update_accessibility $app $is_public
+  else
+    # debug "No new version available, no upgrade performed!"
+    return 1
+  fi
 }
+
+main

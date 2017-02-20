@@ -9,16 +9,6 @@ set -eu
 source /usr/share/yunohost/helpers
 source .hfunctions
 
-app_config_get() { 
-  local app_config=$1
-  local attribute=$2
-  
-  cat ${app_config} \
-    | grep ${attribute} \
-    | cut --delimiter== --fields=2
-}
-
-
 #
 # With reference to https://github.com/YunoHost/yunohost/pull/234/files
 # TODO: remove me ynh_normalize_path is in stable 
@@ -44,12 +34,14 @@ main() {
   local app_config=../conf/app.src #should we make this a convention?
   local nginx_config_template=../conf/nginx.conf
   local url=$domain$path
+  local source_version=$(app_config_get $app_config "SOURCE_VERSION")
 
   ynh_app_setting_set $app is_public $is_public
   ynh_app_setting_set $app domain $domain
   ynh_app_setting_set $app path $path
   ynh_app_setting_set $app url $url
   ynh_app_setting_set $app deploy_path $deploy_path
+  ynh_app_setting_set $app app_version $source_version
 
   sudo yunohost app checkurl $url -a $app 
 
@@ -59,4 +51,3 @@ main() {
 }
 
 main
-

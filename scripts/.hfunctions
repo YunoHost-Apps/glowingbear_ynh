@@ -39,7 +39,6 @@ extract_archive() {
   sudo chown --recursive root: $deploy_path
 }
 
-
 obtain_and_deploy_source() {
   local app_config=$1
   local deploy_path=$2
@@ -60,4 +59,21 @@ update_accessibility() {
     ynh_app_setting_set $app unprotected_uris "/"
     sudo yunohost app ssowatconf
   fi
+}
+
+app_config_get() { 
+  local app_config=$1
+  local attribute=$2
+  
+  cat ${app_config} \
+    | grep ${attribute} \
+    | cut --delimiter== --fields=2
+}
+
+debug() {
+  local message=$1
+
+  echo -e "############# DEBUG START ###############" 1>&2
+  echo -e "${message}" 1>&2
+  echo -e "############# DEBUG END ###############" 1>&2
 }
