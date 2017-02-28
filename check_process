@@ -31,8 +31,9 @@
 	Level 1=auto
 	Level 2=auto
 	Level 3=auto
-	Level 4=0
-	Level 5=auto
+	Level 4=na 
+# level 4: the app does not directly use Yunohost user data	
+  Level 5=auto
 	Level 6=auto
 	Level 7=auto
 	Level 8=0
