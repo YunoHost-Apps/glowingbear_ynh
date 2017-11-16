@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 source /usr/share/yunohost/helpers
-source .hfunctions
+source _common.sh
 
 main() {
   ynh_abort_if_errors

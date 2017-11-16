@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 source /usr/share/yunohost/helpers
-source .hfunctions
+source _common.sh
 
 app_config_get() { 
   local app_config=$1

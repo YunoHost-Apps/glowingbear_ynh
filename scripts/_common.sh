@@ -4,7 +4,7 @@ set -eu
 
 update_nginx_configuration() {
   local app=$1
-  local nginx_config_template=$2 
+  local nginx_config_template=$2
   local domain=$3
   local path=$4
   local deploy_path=$5
@@ -34,11 +34,10 @@ extract_archive() {
   local src_file=$1
   local deploy_path=$2
 
-  sudo mkdir --parents ${deploy_path} 
+  sudo mkdir --parents ${deploy_path}
   sudo tar --extract --file=${src_file} --directory=${deploy_path} --overwrite --strip-components 1
   sudo chown --recursive root: $deploy_path
 }
-
 
 obtain_and_deploy_source() {
   local app_config=$1
