@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-# Exit on command errors 
-# set -o errexit 
-# Treat unset variables as an error
-# set -o nounset
-set -eu
-
 source /usr/share/yunohost/helpers
 source .hfunctions
 
@@ -36,6 +30,8 @@ ynh_normalize_path() {
 }
 
 main() {
+  ynh_abort_if_errors
+
   local app=$YNH_APP_INSTANCE_NAME
   local is_public=$YNH_APP_ARG_IS_PUBLIC
   local domain=$YNH_APP_ARG_DOMAIN

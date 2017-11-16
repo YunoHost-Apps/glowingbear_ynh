@@ -1,15 +1,11 @@
 #!/usr/bin/env bash
 
-# Exit on command errors 
-#set -o errexit 
-# Treat unset variables as an error
-#set -o nounset
-set -eu
-
 source /usr/share/yunohost/helpers
 source .hfunctions
 
 main() {
+  ynh_abort_if_errors
+
   local app=${YNH_APP_INSTANCE_NAME}
   local domain=$(ynh_app_setting_get ${app} domain)
   local path=$(ynh_app_setting_get ${app} path)
