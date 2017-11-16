@@ -16,8 +16,9 @@ main() {
   local url=$(ynh_app_setting_get $app url)
   local deploy_path=$(ynh_app_setting_get $app deploy_path)
   local nginx_conf=/etc/nginx/conf.d/$domain.d/$app.conf
+  local is_public=$(ynh_app_setting_get $app is_public)
 
-  sudo yunohost app checkurl $url -a $app 
+  sudo yunohost app checkurl $url -a $app
 
   sudo cp -a "./sources" $deploy_path
   sudo chown www-data:www-data $deploy_path -R
@@ -26,14 +27,7 @@ main() {
 
   sudo service nginx reload
 
-  # TODO: enable with fix of https://github.com/YunoHost/yunohost/pull/246
-  # update_accessibility $app $is_public
-
-  # TODO: remove with fix of https://github.com/YunoHost/yunohost/pull/246
-  if [[ ${is_public:-0} -eq 1 ]]; then
-    ynh_app_setting_set $app unprotected_uris "/"
-    sudo yunohost app ssowatconf
-  fi
+  update_accessibility $app $is_public
 }
 
 main
