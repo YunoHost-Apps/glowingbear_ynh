@@ -7,7 +7,7 @@
     "fr": "Un client Web pour WeeChat."
   },
   "url": "https://www.glowing-bear.org",
-  "license": "free",
+  "license": "AGPL-3.0",
   "version": "0.6.0",
   "maintainer": {
     "name": "jodeko",
