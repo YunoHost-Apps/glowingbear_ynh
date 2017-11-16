@@ -3,10 +3,10 @@
 source /usr/share/yunohost/helpers
 source _common.sh
 
-app_config_get() { 
+app_config_get() {
   local app_config=$1
   local attribute=$2
-  
+
   cat ${app_config} \
     | grep ${attribute} \
     | cut --delimiter== --fields=2
@@ -25,13 +25,14 @@ main() {
   local url=$domain$path
   local path=$(ynh_normalize_url_path $path)
 
+  ynh_webpath_available $domain $path
+  ynh_webpath_register $app $domain $path
+
   ynh_app_setting_set $app is_public $is_public
   ynh_app_setting_set $app domain $domain
   ynh_app_setting_set $app path $path
   ynh_app_setting_set $app url $url
   ynh_app_setting_set $app deploy_path $deploy_path
-
-  sudo yunohost app checkurl $url -a $app 
 
   obtain_and_deploy_source $app_config $deploy_path
   update_nginx_configuration $app $nginx_config_template $domain $path $deploy_path
@@ -39,4 +40,3 @@ main() {
 }
 
 main
-

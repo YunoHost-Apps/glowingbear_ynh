@@ -18,7 +18,8 @@ main() {
   local nginx_conf=/etc/nginx/conf.d/$domain.d/$app.conf
   local is_public=$(ynh_app_setting_get $app is_public)
 
-  sudo yunohost app checkurl $url -a $app
+  ynh_webpath_available $domain $path
+  ynh_webpath_register $app $domain $path
 
   sudo cp -a "./sources" $deploy_path
   sudo chown www-data:www-data $deploy_path -R
