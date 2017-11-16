@@ -12,34 +12,18 @@ app_config_get() {
     | cut --delimiter== --fields=2
 }
 
-
-#
-# With reference to https://github.com/YunoHost/yunohost/pull/234/files
-# TODO: remove me ynh_normalize_path is in stable 
-#
-ynh_normalize_path() {
- local path=$1
-
- if [ "${path:0:1}" != "/" ]; then
-   path="/$path"
- fi
- if [ "${path:${#path}-1}" == "/" ] && [ ${#path} -gt 1 ]; then
-   path="${path:0:${#path}-1}"
- fi
- echo $path
-}
-
 main() {
   ynh_abort_if_errors
 
   local app=$YNH_APP_INSTANCE_NAME
   local is_public=$YNH_APP_ARG_IS_PUBLIC
   local domain=$YNH_APP_ARG_DOMAIN
-  local path=$(ynh_normalize_path $YNH_APP_ARG_PATH)
+  local path=$YNH_APP_ARG_PATH
   local deploy_path=/var/www/$app
   local app_config=../conf/app.src #should we make this a convention?
   local nginx_config_template=../conf/nginx.conf
   local url=$domain$path
+  local path=$(ynh_normalize_url_path $path)
 
   ynh_app_setting_set $app is_public $is_public
   ynh_app_setting_set $app domain $domain
