@@ -7,16 +7,15 @@ main() {
   ynh_abort_if_errors
 
   local app=${YNH_APP_INSTANCE_NAME}
-  local domain=$(ynh_app_setting_get ${app} domain)
-  local path=$(ynh_app_setting_get ${app} path)
+  local domain=$(ynh_app_setting_get $app domain)
+  local path=$(ynh_app_setting_get $app path)
   local is_public=$(ynh_app_setting_get $app is_public)
   local deploy_path=$(ynh_app_setting_get $app deploy_path)
-  local app_config=../conf/app.src 
   local nginx_config_template=../conf/nginx.conf
 
   path=${path%/}
 
-  obtain_and_deploy_source $app_config $deploy_path
+  ynh_setup_source $deploy_path
   update_nginx_configuration $app $nginx_config_template $domain $path $deploy_path
   update_accessibility $app $is_public
 }

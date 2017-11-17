@@ -3,15 +3,6 @@
 source /usr/share/yunohost/helpers
 source _common.sh
 
-app_config_get() {
-  local app_config=$1
-  local attribute=$2
-
-  cat ${app_config} \
-    | grep ${attribute} \
-    | cut --delimiter== --fields=2
-}
-
 main() {
   ynh_abort_if_errors
 
@@ -20,7 +11,6 @@ main() {
   local domain=$YNH_APP_ARG_DOMAIN
   local path=$YNH_APP_ARG_PATH
   local deploy_path=/var/www/$app
-  local app_config=../conf/app.src #should we make this a convention?
   local nginx_config_template=../conf/nginx.conf
   local url=$domain$path
   local path=$(ynh_normalize_url_path $path)
@@ -34,7 +24,8 @@ main() {
   ynh_app_setting_set $app url $url
   ynh_app_setting_set $app deploy_path $deploy_path
 
-  obtain_and_deploy_source $app_config $deploy_path
+  ynh_setup_source $deploy_path
+
   update_nginx_configuration $app $nginx_config_template $domain $path $deploy_path
   update_accessibility $app $is_public
 }

@@ -7,28 +7,39 @@ fi
 source _common.sh
 source /usr/share/yunohost/helpers
 
+is_app_restorable() {
+	local -r domain=$1
+	local -r path_url=$2
+	local -r deploy_path=$3
+
+	ynh_webpath_available $domain $path_url \
+		|| ynh_die "Path not available: ${domain}${path_url}"
+
+	test ! -d $deploy_path \
+		|| ynh_die "There is already a directory: $deploy_path "
+}
+
 main() {
-  ynh_abort_if_errors
+	ynh_abort_if_errors
 
-  local app=$YNH_APP_INSTANCE_NAME
-  local domain=$(ynh_app_setting_get $app domain)
-  local path=$(ynh_app_setting_get $app path)
-  local url=$(ynh_app_setting_get $app url)
-  local deploy_path=$(ynh_app_setting_get $app deploy_path)
-  local nginx_conf=/etc/nginx/conf.d/$domain.d/$app.conf
-  local is_public=$(ynh_app_setting_get $app is_public)
+	local app=$YNH_APP_INSTANCE_NAME
+	local domain=$(ynh_app_setting_get $app domain)
+	local path=$(ynh_app_setting_get $app path)
+	local url=$(ynh_app_setting_get $app url)
+	local deploy_path=$(ynh_app_setting_get $app deploy_path)
+	local nginx_conf=/etc/nginx/conf.d/$domain.d/$app.conf
+	local is_public=$(ynh_app_setting_get $app is_public)
 
-  ynh_webpath_available $domain $path
-  ynh_webpath_register $app $domain $path
+	is_app_restorable $domain $path $deploy_path
 
-  sudo cp -a "./sources" $deploy_path
-  sudo chown www-data:www-data $deploy_path -R
+	sudo cp -a "./sources" $deploy_path
+	sudo chown www-data:www-data $deploy_path -R
 
-  sudo cp -a "./conf/nginx.conf" $nginx_conf
+	sudo cp -a "./conf/nginx.conf" $nginx_conf
 
-  sudo service nginx reload
+	sudo service nginx reload
 
-  update_accessibility $app $is_public
+	update_accessibility $app $is_public
 }
 
 main
