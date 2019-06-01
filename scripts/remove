@@ -9,8 +9,8 @@ main() {
   local deploy_path=$(ynh_app_setting_get $app deploy_path)
   local nginx_conf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
 
-  sudo rm -rf $deploy_path
-  sudo rm -f $nginx_conf
+  ynh_secure_remove $deploy_path
+  ynh_secure_remove $nginx_conf
 
   sudo service nginx reload
 }
