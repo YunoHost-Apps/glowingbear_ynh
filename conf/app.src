@@ -1,6 +1,6 @@
-SOURCE_URL=https://github.com/glowing-bear/glowing-bear/archive/0.7.1.tar.gz
-SOURCE_SUM=01f88867c4538b0f20b882619ebbac9edfbc9458f22f788824fb6d4fc4a54786
+SOURCE_URL=https://github.com/glowing-bear/glowing-bear/archive/0.7.2.tar.gz
+SOURCE_SUM=d917ccce718e7b79d072603e70da2ea692340c374297d5c2dac22807a10221e2
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
-SOURCE_FILENAME=v0.6.0.tar.gz
+SOURCE_FILENAME=v0.7.2.tar.gz
