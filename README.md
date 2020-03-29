@@ -1,6 +1,6 @@
 # Glowing Bear for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/glowingbear.svg)](https://dash.yunohost.org/appci/app/glowingbear)
+[![Integration level](https://dash.yunohost.org/integration/glowingbear.svg)](https://dash.yunohost.org/appci/app/glowingbear) ![](https://ci-apps.yunohost.org/ci/badges/glowingbear.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/glowingbear.maintain.svg)  
 [![Install glowingbear with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=glowingbear)
 
 > *This package allow you to install glowingbear quickly and simply on a YunoHost server.
