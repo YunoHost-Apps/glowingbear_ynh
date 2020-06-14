@@ -1,9 +1,9 @@
 # Glowing Bear for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/REPLACEBYYOURAPP.svg)](https://dash.yunohost.org/appci/app/REPLACEBYYOURAPP) ![](https://ci-apps.yunohost.org/ci/badges/REPLACEBYYOURAPP.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/REPLACEBYYOURAPP.maintain.svg)  
-[![Install REPLACEBYYOURAPP with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=REPLACEBYYOURAPP)
+[![Integration level](https://dash.yunohost.org/integration/glowing_bear.svg)](https://dash.yunohost.org/appci/app/glowing_bear) ![](https://ci-apps.yunohost.org/ci/badges/glowing_bear.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/glowing_bear.maintain.svg)  
+[![Install Glowing Bear with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=glowing_bear)
 
-> *This package allows you to install REPLACEBYYOURAPP quickly and simply on a YunoHost server.  
+> *This package allows you to install Glowing Bear quickly and simply on a YunoHost server.  
 If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
 
 ## Overview
@@ -35,8 +35,8 @@ Glowing Bear is a web frontend for the WeeChat IRC client and strives to be a mo
 
 #### Supported architectures
 
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/REPLACEBYYOURAPP%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/REPLACEBYYOURAPP/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/REPLACEBYYOURAPP%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/REPLACEBYYOURAPP/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/glowing_bear%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/glowing_bear/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/glowing_bear%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/glowing_bear/)
 
 ## Links
 
@@ -50,11 +50,11 @@ Glowing Bear is a web frontend for the WeeChat IRC client and strives to be a mo
 Developer info
 ----------------
 
-Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/REPLACEBYYOURAPP_ynh/tree/testing).
+Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/glowing_bear_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
 ```
-sudo yunohost app install https://github.com/YunoHost-Apps/REPLACEBYYOURAPP_ynh/tree/testing --debug
+sudo yunohost app install https://github.com/YunoHost-Apps/glowing_bear_ynh/tree/testing --debug
 or
-sudo yunohost app upgrade REPLACEBYYOURAPP -u https://github.com/YunoHost-Apps/REPLACEBYYOURAPP_ynh/tree/testing --debug
+sudo yunohost app upgrade glowing_bear -u https://github.com/YunoHost-Apps/glowing_bear_ynh/tree/testing --debug
 ```
