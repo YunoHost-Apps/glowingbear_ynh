@@ -1,18 +1,46 @@
-#!/usr/bin/env bash
-set -u
+#!/bin/bash
 
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
 source /usr/share/yunohost/helpers
 
-main() {
-  local app=${YNH_APP_INSTANCE_NAME}
-  local domain=$(ynh_app_setting_get $app domain)
-  local deploy_path=$(ynh_app_setting_get $app deploy_path)
-  local nginx_conf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
+#=================================================
+# LOAD SETTINGS
+#=================================================
+ynh_script_progression --message="Loading installation settings..."
 
-  ynh_secure_remove $deploy_path
-  ynh_secure_remove $nginx_conf
+app=$YNH_APP_INSTANCE_NAME
 
-  sudo service nginx reload
-}
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
-main
+#=================================================
+# STANDARD REMOVE
+#=================================================
+# REMOVE APP MAIN DIR
+#=================================================
+ynh_script_progression --message="Removing app main directory..."
+
+# Remove the app directory securely
+ynh_secure_remove --file="$final_path"
+
+#=================================================
+# REMOVE NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Removing nginx web server configuration..."
+
+# Remove the dedicated nginx config
+ynh_remove_nginx_config
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Removal of $app completed"
