@@ -11,13 +11,17 @@ Glowing Bear is a web frontend for the WeeChat IRC client and strives to be a mo
 
 **Shipped version:** 0.8.0
 
+## Important points to read before installing
+
+1. **Glowing Bear** require a fully functionnal wechat installed on your YunoHost server
+
 ## Screenshots
 
 ![](https://camo.githubusercontent.com/277788ad057cf6934499621c7ba1193e6edbdb0e/68747470733a2f2f347a322e64652f676c6f77696e67626561722e706e67)
 
 ## Configuration
 
-* You should run `apt install weechat` on your Yunohost installation
+* You should run `apt install weechat` on your YunoHost server
 * Follow https://github.com/glowing-bear/glowing-bear#getting-started
 
 ## Documentation
