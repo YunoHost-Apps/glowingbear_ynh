@@ -24,7 +24,7 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 #=================================================
 # REMOVE APP MAIN DIR
 #=================================================
-ynh_script_progression --message="Removing app main directory..."
+ynh_script_progression --message="Removing Glowing Bear main directory..."
 
 # Remove the app directory securely
 ynh_secure_remove --file="$final_path"
@@ -32,9 +32,9 @@ ynh_secure_remove --file="$final_path"
 #=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Removing nginx web server configuration..."
+ynh_script_progression --message="Removing NGINX web server configuration..."
 
-# Remove the dedicated nginx config
+# Remove the dedicated NGINX config
 ynh_remove_nginx_config
 
 #=================================================
@@ -43,4 +43,4 @@ ynh_remove_nginx_config
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Removal of $app completed"
+ynh_script_progression --message="Removal of Glowing Bear completed"
