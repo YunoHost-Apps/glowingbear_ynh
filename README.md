@@ -9,7 +9,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 Glowing Bear is a web frontend for the WeeChat IRC client and strives to be a modern interface. It relies on WeeChat to do all the heavy lifting and then provides some nice features on top of that, like embedding images, videos, and other content. The best part, however, is that you can use it from any modern internet device -- whether it's a computer, tablet, or smart phone -- and all your stuff is there, wherever you are. You don't have to deal with the messy technical details, and all you need to have installed is a browser or our app.
 
-**Shipped version:** 0.8.0
+**Shipped version:** 0.9.0
 
 ## Important points to read before installing
 
@@ -33,9 +33,9 @@ Glowing Bear is a web frontend for the WeeChat IRC client and strives to be a mo
 
 #### Multi-user support
 
-* Is LDAP supported? No, not relevant.
-* Is HTTP auth supported? Yes.
-* Can the app be used by multiple users? No.
+* Is LDAP supported? **No** not relevant.
+* Is HTTP auth supported? **Yes**
+* Can the app be used by multiple users? **No**
 
 #### Supported architectures
 
@@ -51,8 +51,7 @@ Glowing Bear is a web frontend for the WeeChat IRC client and strives to be a mo
 
 ---
 
-Developer info
-----------------
+## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/glowingbear_ynh/tree/testing).
 
