@@ -43,4 +43,4 @@ ynh_remove_nginx_config
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Removal of Glowing Bear completed"
+ynh_script_progression --message="Removal of $app completed"
