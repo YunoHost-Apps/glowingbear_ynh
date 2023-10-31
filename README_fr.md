@@ -5,24 +5,24 @@ It shall NOT be edited by hand.
 
 # Glowing Bear pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/glowingbear.svg)](https://dash.yunohost.org/appci/app/glowingbear) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/glowingbear.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/glowingbear.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/glowingbear.svg)](https://dash.yunohost.org/appci/app/glowingbear) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/glowingbear.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/glowingbear.maintain.svg)
+
 [![Installer Glowing Bear avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=glowingbear)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Glowing Bear rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Glowing Bear rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 Glowing Bear is a web frontend for the WeeChat IRC client and strives to be a modern interface. It relies on WeeChat to do all the heavy lifting and then provides some nice features on top of that, like embedding images, videos, and other content. The best part, however, is that you can use it from any modern internet device -- whether it's a computer, tablet, or smart phone -- and all your stuff is there, wherever you are. You don't have to deal with the messy technical details, and all you need to have installed is a browser or our app.
 
-**Version incluse :** 0.9.0~ynh1
+**Version incluse :** 0.9.0~ynh1
 
+## Captures d’écran
 
-## Captures d'écran
-
-![Capture d'écran de Glowing Bear](./doc/screenshots/screenshot.png)
+![Capture d’écran de Glowing Bear](./doc/screenshots/screenshot.png)
 
 ## Avertissements / informations importantes
 
@@ -31,7 +31,7 @@ Glowing Bear is a web frontend for the WeeChat IRC client and strives to be a mo
 1. **Glowing Bear** require a fully functionnal wechat installed on your YunoHost server
 ## Documentations et ressources
 
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_glowingbear>
+* YunoHost Store: <https://apps.yunohost.org/app/glowingbear>
 * Signaler un bug : <https://github.com/YunoHost-Apps/glowingbear_ynh/issues>
 
 ## Informations pour les développeurs
@@ -46,4 +46,4 @@ ou
 sudo yunohost app upgrade glowingbear -u https://github.com/YunoHost-Apps/glowingbear_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
