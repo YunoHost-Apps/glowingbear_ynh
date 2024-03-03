@@ -1,1 +1,1 @@
-**Glowing Bear** require a fully functionnal wechat installed on your YunoHost server.
+**Glowing Bear** require a fully functionnal Weechat installed on your YunoHost server.
