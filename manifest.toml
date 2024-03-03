@@ -1,0 +1,55 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
+packaging_format = 2
+
+id = "glowingbear"
+name = "Glowing Bear"
+description.en = "Web client for WeeChat"
+description.fr = "Client Web pour WeeChat"
+
+version = "0.9.0~ynh2"
+
+maintainers = ["jodeko"]
+
+[upstream]
+license = "AGPL-3.0"
+website = "https://www.glowing-bear.org"
+code = "https://github.com/glowing-bear/glowing-bear"
+
+[integration]
+yunohost = ">= 11.2"
+architectures = "all"
+multi_instance = true
+ldap = false
+sso = false
+disk = "50M"
+ram.build = "100M"
+ram.runtime = "100M"
+
+[install]
+    [install.domain]
+    # this is a generic question - ask strings are automatically handled by Yunohost's core
+    type = "domain"
+
+    [install.path]
+    # this is a generic question - ask strings are automatically handled by Yunohost's core
+    type = "path"
+    default = "/glowing-bear"
+
+    [install.init_main_permission]
+    type = "group"
+    default = false
+
+[resources]
+    [resources.sources.main]
+    url = "https://github.com/glowing-bear/glowing-bear/archive/0.9.0.tar.gz"
+    sha256 = "9ff5370b4d384b1d7fff77ed5c46014cb2733f14f5032096f4acfdf6a4d0cf63"
+
+    autoupdate.strategy = "latest_github_release"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+    main.url = "/"

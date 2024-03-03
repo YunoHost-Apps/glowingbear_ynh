@@ -8,15 +8,15 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# REMOVE SYSTEM CONFIGURATIONS
+# MODIFY URL IN NGINX CONF
 #=================================================
-ynh_script_progression --message="Removing system configurations related to $app..." --weight=1
+ynh_script_progression --message="Updating NGINX web server configuration..." --weight=1
 
-# Remove the dedicated NGINX config
-ynh_remove_nginx_config
+# this will most likely adjust NGINX config correctly
+ynh_change_url_nginx_config
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Removal of $app completed"
+ynh_script_progression --message="Change of URL completed for $app" --last
