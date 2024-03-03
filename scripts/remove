@@ -1,8 +1,6 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
-#=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
 
@@ -10,35 +8,13 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
+# REMOVE SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Loading installation settings..."
-
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-
-#=================================================
-# STANDARD REMOVE
-#=================================================
-# REMOVE APP MAIN DIR
-#=================================================
-ynh_script_progression --message="Removing Glowing Bear main directory..."
-
-# Remove the app directory securely
-ynh_secure_remove --file="$final_path"
-
-#=================================================
-# REMOVE NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Removing NGINX web server configuration..."
+ynh_script_progression --message="Removing system configurations related to $app..." --weight=1
 
 # Remove the dedicated NGINX config
 ynh_remove_nginx_config
 
-#=================================================
-# GENERIC FINALIZATION
 #=================================================
 # END OF SCRIPT
 #=================================================
