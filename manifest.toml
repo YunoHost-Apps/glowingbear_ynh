@@ -7,9 +7,9 @@ name = "Glowing Bear"
 description.en = "Web client for WeeChat"
 description.fr = "Client Web pour WeeChat"
 
-version = "0.9.0~ynh3"
+version = "0.9.0~ynh4"
 
-maintainers = ["jodeko"]
+maintainers = []
 
 [upstream]
 license = "AGPL-3.0"
