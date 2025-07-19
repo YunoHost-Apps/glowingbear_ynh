@@ -17,7 +17,8 @@ website = "https://www.glowing-bear.org"
 code = "https://github.com/glowing-bear/glowing-bear"
 
 [integration]
-yunohost = ">= 11.2"
+yunohost = ">= 11.2.18"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 ldap = false
@@ -50,6 +51,7 @@ ram.runtime = "100M"
     [resources.system_user]
 
     [resources.install_dir]
+    group = "www-data:r-x"
 
     [resources.permissions]
     main.url = "/"
