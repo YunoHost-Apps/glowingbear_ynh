@@ -7,9 +7,9 @@ name = "Glowing Bear"
 description.en = "Web client for WeeChat"
 description.fr = "Client Web pour WeeChat"
 
-version = "0.9.0~ynh3"
+version = "0.9.0~ynh4"
 
-maintainers = ["jodeko"]
+maintainers = []
 
 [upstream]
 license = "AGPL-3.0"
@@ -17,22 +17,23 @@ website = "https://www.glowing-bear.org"
 code = "https://github.com/glowing-bear/glowing-bear"
 
 [integration]
-yunohost = ">= 11.2"
+yunohost = ">= 12.0.9"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
+
 ldap = false
 sso = false
+
 disk = "50M"
 ram.build = "100M"
 ram.runtime = "100M"
 
 [install]
     [install.domain]
-    # this is a generic question - ask strings are automatically handled by Yunohost's core
     type = "domain"
 
     [install.path]
-    # this is a generic question - ask strings are automatically handled by Yunohost's core
     type = "path"
     default = "/glowing-bear"
 
@@ -50,6 +51,7 @@ ram.runtime = "100M"
     [resources.system_user]
 
     [resources.install_dir]
+    group = "www-data:r-x"
 
     [resources.permissions]
     main.url = "/"
